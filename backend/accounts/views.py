@@ -1,16 +1,25 @@
 # accounts/views.py
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
+from rest_framework import status
 from .models import Account
 from .serializers import AccountSerializer
 
 
 # Get all accounts
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def account_list(request):
-    accounts = Account.objects.all()
-    serializer = AccountSerializer(accounts, many=True)
-    return JsonResponse(serializer.data, safe=False)
+    if request.method == 'GET':
+        accounts = Account.objects.all()
+        serializer = AccountSerializer(accounts, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    elif request.method == 'POST':
+        serializer = AccountSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # Get one account by ID
