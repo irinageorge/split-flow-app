@@ -20,6 +20,7 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   -webkit-text-stroke: 1px #011b37;
+  word-break: break-word;
 }
 
 .title-row {
@@ -55,4 +56,69 @@ body {
   text-align: center;
   font-weight: 500;
   letter-spacing: 0.02em;
+}
+/* 
+@media (max-width: 1280px) {
+}
+
+@media (max-width: 1536px) {
+} */
+
+@media (max-width: 1032px) {
+  .title {
+    font-size: 4rem;
+  }
+  .subtitle {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+  .app-icon {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 3rem;
+    letter-spacing: 0.08rem;
+  }
+  .subtitle {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+  .app-icon {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 600px) {
+  .title {
+    font-size: 2.5rem;
+    letter-spacing: 0.08rem;
+  }
+  .app-icon {
+    width: 35px;
+    height: 35px;
+  }
+  .subtitle {
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.8rem;
+    letter-spacing: 0.08rem;
+  }
+  .app-icon {
+    width: 25px;
+    height: 25px;
+  }
+  .subtitle {
+    font-size: 0.5rem;
+    margin-bottom: 1rem;
+  }
 }
