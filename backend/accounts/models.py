@@ -13,5 +13,5 @@ class Account(models.Model):
     )
     email = models.CharField(
         unique=True,
-        max_length=20
+        max_length=50
     )
