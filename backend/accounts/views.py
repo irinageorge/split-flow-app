@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from .models import Account
 from .serializers import AccountSerializer
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
 
 
 
@@ -42,3 +42,20 @@ def account_detail(request, pk):
     serializer = AccountSerializer(account)
     return JsonResponse(serializer.data)
 
+@api_view(['POST'])
+def account_login(request):
+    username = request.data.get("username")
+    password = request.data.get("password")
+
+    if not username or not password:
+        return JsonResponse({"error": "Username and password are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        account = Account.objects.get(username=username)
+    except Account.DoesNotExist:
+        return JsonResponse({"error": "Invalid username or password"}, status=status.HTTP_401_UNAUTHORIZED)
+
+    if check_password(password, account.password):
+        return JsonResponse({"message": "Login successful", "user_id": account.id}, status=status.HTTP_200_OK)
+    else:
+        return JsonResponse({"error": "Invalid username or password"}, status=status.HTTP_401_UNAUTHORIZED)
