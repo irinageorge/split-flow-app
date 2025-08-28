@@ -1,12 +1,13 @@
 # accounts/views.py
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework import status
 from .models import Account
 from .serializers import AccountSerializer
 from django.contrib.auth.hashers import make_password, check_password
 
-
+def home(request):
+    return HttpResponse("Backend running")
 
 # Get all accounts
 @api_view(['GET'])
