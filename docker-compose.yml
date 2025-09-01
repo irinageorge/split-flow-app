@@ -1,15 +1,6 @@
 version: "3.9"
 
 services:
-  db:
-    image: postgres:16
-    environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypass
-      POSTGRES_DB: mydb
-    ports:
-      - "5432:5432"
-
   backend:
     build: ./backend
     command: python manage.py runserver 0.0.0.0:8000
@@ -17,10 +8,8 @@ services:
       - ./backend:/app
     ports:
       - "8000:8000"
-    depends_on:
-      - db
-    environment:
-      - DATABASE_URL=postgres://myuser:mypass@db:5432/mydb
+    env_file:
+      - ./backend/.env.docker
 
   frontend:
     build: ./frontend
