@@ -45,18 +45,18 @@ def account_detail(request, pk):
 
 @api_view(['POST'])
 def account_login(request):
-    username = request.data.get("username")
+    email = request.data.get("email")
     password = request.data.get("password")
 
-    if not username or not password:
-        return JsonResponse({"error": "Username and password are required."}, status=status.HTTP_400_BAD_REQUEST)
+    if not email or not password:
+        return JsonResponse({"error": "Email and password are required."}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
-        account = Account.objects.get(username=username)
+        account = Account.objects.get(email=email)
     except Account.DoesNotExist:
-        return JsonResponse({"error": "Invalid username or password"}, status=status.HTTP_401_UNAUTHORIZED)
+        return JsonResponse({"error": "Login failed. No such account exist."}, status=status.HTTP_401_UNAUTHORIZED)
 
     if check_password(password, account.password):
         return JsonResponse({"message": "Login successful", "user_id": account.id}, status=status.HTTP_200_OK)
     else:
-        return JsonResponse({"error": "Invalid username or password"}, status=status.HTTP_401_UNAUTHORIZED)
+        return JsonResponse({"error": "Invalid email or password"}, status=status.HTTP_401_UNAUTHORIZED)
