@@ -45,8 +45,8 @@ def account_detail(request, pk):
 
 @api_view(['POST'])
 def account_login(request):
-    email = request.data.get("email")
     password = request.data.get("password")
+    email = request.data.get('email')
 
     if not email or not password:
         return JsonResponse({"error": "Email and password are required."}, status=status.HTTP_400_BAD_REQUEST)
