@@ -1,6 +1,6 @@
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
-export const useHomePage = () => {
+export const useLoginPage = () => {
   const { isPending, isError, data, error } = useQuery({
     queryKey: ["login"],
     queryFn: async () => {

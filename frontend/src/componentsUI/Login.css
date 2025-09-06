@@ -1,0 +1,63 @@
+.parent {
+  display: grid;
+  grid-template-columns: 20% 20% 20% 20% 20%;
+  grid-template-rows: 20% 20% 20% 20% 20%;
+  height: 100vh;
+}
+
+.title-position {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  justify-self: start;
+  align-self: start;
+  text-align: left;
+  grid-column-start: 2;
+  grid-column-end: span 2;
+  grid-row: 2;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: 4.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  background: #ffffff;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  word-break: break-word;
+  order: 2;
+}
+
+.button-row {
+  display: flex;
+  gap: 2rem;
+  grid-column: 2;
+  grid-row: 4;
+  margin-top: 1rem;
+}
+
+.app-icon {
+  width: 60px;
+  height: 60px;
+  display: block;
+  object-fit: contain;
+  order: 1;
+}
+
+.subtitle {
+  font-size: 2rem;
+  color: #ffffff;
+  font-weight: 700;
+  grid-column: 2 / span 2;
+  grid-row: 3;
+  align-self: end;
+  justify-self: start;
+}
+
+.globe {
+  grid-row: 2 / span 3;
+  grid-column: 4 / span 2;
+}

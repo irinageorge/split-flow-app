@@ -17,7 +17,7 @@ export default function SignIn() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="outline">Sign in</Button>
+                <Button variant="default">Log in</Button>
             </DialogTrigger>
             <DialogContent>
                 <div className="flex flex-col items-center gap-2">
