@@ -3,7 +3,8 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
-import { LoginPage } from './componentsUI/Login'
+import { LoginPage } from './componentsUI/LoginPage'
+
 
 
 const queryClient = new QueryClient()

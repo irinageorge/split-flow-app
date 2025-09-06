@@ -11,13 +11,15 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import appIcon from "../assets/split.svg"
+
 
 export default function SignIn() {
     const id = useId()
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="default">Log in</Button>
+                <Button variant="brand">Log in</Button>
             </DialogTrigger>
             <DialogContent>
                 <div className="flex flex-col items-center gap-2">
@@ -25,19 +27,12 @@ export default function SignIn() {
                         className="flex size-11 shrink-0 items-center justify-center rounded-full border"
                         aria-hidden="true"
                     >
-                        <svg
-                            className="stroke-zinc-800 dark:stroke-zinc-100"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            viewBox="0 0 32 32"
-                            aria-hidden="true"
-                        >
-                            <circle cx="16" cy="16" r="12" fill="none" strokeWidth="8" />
-                        </svg>
+                        <img src={appIcon} alt="app icon" className="w-5 h-5" />
+                        <circle cx="16" cy="16" r="12" fill="none" strokeWidth="8" />
+
                     </div>
                     <DialogHeader>
-                        <DialogTitle className="sm:text-center">Welcome back</DialogTitle>
+                        <DialogTitle className="sm:text-center">Welcome back to SplitFlow</DialogTitle>
                         <DialogDescription className="sm:text-center">
                             Enter your credentials to login to your account.
                         </DialogDescription>
@@ -65,7 +60,7 @@ export default function SignIn() {
                             />
                         </div>
                     </div>
-                    <div className="flex justify-between gap-2">
+                    {/* <div className="flex justify-between gap-2">
                         <div className="flex items-center gap-2">
                             <Checkbox id={`${id}-remember`} />
                             <Label
@@ -78,12 +73,12 @@ export default function SignIn() {
                         <a className="text-sm underline hover:no-underline" href="#">
                             Forgot password?
                         </a>
-                    </div>
+                    </div> */}
                     <Button type="button" className="w-full">
                         Sign in
                     </Button>
                 </form>
             </DialogContent>
-        </Dialog>
+        </Dialog >
     )
 }
