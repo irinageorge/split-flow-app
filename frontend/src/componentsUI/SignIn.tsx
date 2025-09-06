@@ -60,7 +60,7 @@ export default function SignIn() {
                             />
                         </div>
                     </div>
-                    <div className="flex justify-between gap-2">
+                    {/* <div className="flex justify-between gap-2">
                         <div className="flex items-center gap-2">
                             <Checkbox id={`${id}-remember`} />
                             <Label
@@ -73,7 +73,7 @@ export default function SignIn() {
                         <a className="text-sm underline hover:no-underline" href="#">
                             Forgot password?
                         </a>
-                    </div>
+                    </div> */}
                     <Button type="button" className="w-full">
                         Sign in
                     </Button>
