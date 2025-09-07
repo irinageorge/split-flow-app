@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from "react"
+import { useId, useState } from "react"
 import { Button } from "@/components/ui/button"
 // import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -13,8 +13,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import appIcon from "../assets/split.svg"
 import { useLogin } from "@/services/LoginPageQuery"
-import { CheckCircle, Loader2, } from "lucide-react"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Loader2 } from "lucide-react"
 
 export default function SignIn() {
     const id = useId();
@@ -32,40 +31,27 @@ export default function SignIn() {
             {
                 onSuccess: (resp) => {
                     console.log("Login response:", resp);
-                    setOpen(false)
-                    reset();
                 },
                 onError: () => {
-                    setOpen(false);
-                    setEmail("");
                     setPassword("");
+                    setEmail("");
                 },
             }
         );
     };
 
-    useEffect(() => {
-        if (!error) return;
-        const t = setTimeout(() => reset(), 5000);
-        return () => clearTimeout(t);
-    }, [error]);
-
     return (
         <>
-            {error?.message && (
-                <Alert className="text-green-700 bg-green-50 border-green-200 [&>svg]:text-green-600">
-                    <CheckCircle className="h-4 w-4" />
-                    <AlertDescription className="!text-green-700/90">
-                        You were successfully logged in
-                    </AlertDescription>
-                </Alert>
-            )}
-
             <Dialog open={open}
                 onOpenChange={(v) => {
                     setOpen(v);
-                    if (v && error) reset();
+                    if (!v) {
+                        reset();
+                        setEmail("");
+                        setPassword("");
+                    }
                 }}>
+
                 <DialogTrigger asChild>
                     <Button variant="brand">Log in</Button>
                 </DialogTrigger>
@@ -81,6 +67,14 @@ export default function SignIn() {
                                 Enter your credentials to login to your account.
                             </DialogDescription>
                         </DialogHeader>
+                    </div>
+
+                    <div role="status" aria-live="polite" className="min-h-6 text-sm">
+                        {error instanceof Error && (
+                            <p className="mt-2 rounded-md border border-red-300 bg-red-50 px-3 py-2 text-red-700 text-center">
+                                {error.message}
+                            </p>
+                        )}
                     </div>
 
                     <form className="space-y-5" onSubmit={handleFormSubmit}>
