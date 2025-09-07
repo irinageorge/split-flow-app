@@ -114,7 +114,7 @@ export default function SignIn() {
                             </Button>
                         ) : (
                             <Button type="submit" className="w-full">
-                                Sign in
+                                Log in
                             </Button>
                         )}
                     </form>
