@@ -40,7 +40,7 @@ export default function SignUp() {
                 <form className="space-y-5">
                     <div className="space-y-4">
                         <div className="*:not-first:mt-2">
-                            <Label htmlFor={`${id}-name`}>Full name</Label>
+                            <Label htmlFor={`${id}-name`}>Username</Label>
                             <Input
                                 id={`${id}-name`}
                                 placeholder="John Doe"
