@@ -1,4 +1,5 @@
 import { useId, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 // import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -21,6 +22,8 @@ export default function SignIn() {
     const [password, setPassword] = useState("");
     const [open, setOpen] = useState(false);
 
+    const navigate = useNavigate();
+
     const { mutateAsync: login, isPending, error, reset } = useLogin();
 
     const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -31,6 +34,7 @@ export default function SignIn() {
             {
                 onSuccess: (resp) => {
                     console.log("Login response:", resp);
+                    navigate("/home", { replace: true });
                 },
                 onError: () => {
                     setPassword("");
