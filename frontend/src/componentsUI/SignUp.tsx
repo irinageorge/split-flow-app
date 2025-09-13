@@ -1,4 +1,5 @@
 import { useId, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -21,6 +22,8 @@ export default function SignUp() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const navigate = useNavigate();
+
     const { mutate: signUp, isPending, isSuccess, error } = useSignUp();
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -28,6 +31,8 @@ export default function SignUp() {
         signUp({ username, email, password }, {
             onSuccess: (resp) => {
                 console.log("Sign up response:", resp);
+                navigate("/home", { replace: true });
+
             },
             onError: () => {
             },
