@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'accounts',
     'corsheaders',
+    'splitflow',
 ]
 
 MIDDLEWARE = [
