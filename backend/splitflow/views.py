@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework import status
-from .models import Bill, BillEntry
+from .models import Bill, BillEntry, BillUser
 from .serializers import BillSerializer, BillEntrySerializer
 from accounts.models import Account
 
@@ -23,6 +23,7 @@ def bill_list_create(request):
         serializer = BillSerializer(data=request.data)
         if serializer.is_valid():
             bill = serializer.save(created_by=account)
+            BillUser.objects.create(bill=bill, user=account)
             return JsonResponse(BillSerializer(bill).data, status=status.HTTP_201_CREATED)
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
