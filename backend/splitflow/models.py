@@ -22,3 +22,9 @@ class BillEntry(models.Model):
 
     def __str__(self):
         return f'{self.user.username} - {self.amount}'
+
+class BillUser(models.Model):
+    bill = models.ForeignKey(Bill, on_delete=models.CASCADE)
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    joined_on = models.DateTimeField(auto_now_add=True)
+
