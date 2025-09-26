@@ -22,7 +22,7 @@ import { useMemo } from "react"
 type Status = "Future" | "On-going" | "Finished"
 
 const STATUS_COLORS: Record<Status, string> = {
-    Future: "#8884d8",
+    Future: "#8884d8", 
     "On-going": "#20cd8d",
     Finished: "#ff6b6b",
 }

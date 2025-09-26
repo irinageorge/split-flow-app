@@ -156,7 +156,7 @@ export const BillsTable = ({ bills, onAddBill, onDeleteBills }: BillsTableProps)
             {/* table */}
             <div className="overflow-auto rounded-md border">
                 <Table>
-                    <TableHeader style={{ backgroundColor: "#eae8e8ff" }}>
+                    <TableHeader style={{ backgroundColor: "#e0e0e0" }}>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => (
