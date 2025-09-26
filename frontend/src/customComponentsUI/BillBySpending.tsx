@@ -21,7 +21,8 @@ export const BillBySpending = ({ bills }: BillBySpendingProps) => {
     const chartConfig = {
         total: {
             label: "Total spend",
-            color: "var(--chart-2)",
+            color: "#ffa500"
+            ,
         },
     } as const;
 
