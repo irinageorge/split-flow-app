@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
     Table,
     TableBody,
@@ -23,9 +23,11 @@ export type Bill = {
     id: string;
     billName: string;
     location: string;
+    tripDate: string;
+    participants: string[];
     status: string;
-    paymentMethod: string;
-    totalAmount?: string;
+    totalAmount: string;
+    lastUpdated: string;
 };
 
 type BillsTableProps = {
@@ -34,14 +36,14 @@ type BillsTableProps = {
     onDeleteBills: (ids: string[]) => void;
 }
 
-export function BillsTable({ bills, onAddBill, onDeleteBills }: BillsTableProps) {
+export const BillsTable = ({ bills, onAddBill, onDeleteBills }: BillsTableProps) => {
     const [globalFilter, setGlobalFilter] = useState("");
     const [columnFilters, setColumnFilters] = useState<any[]>([]);
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
-    
-    const toggleSelection = (billName: string) => {
+
+    const toggleSelection = (billId: string) => {
         setSelectedIds((prev) =>
-            prev.includes(billName) ? prev.filter((id) => id !== billName) : [...prev, billName]
+            prev.includes(billId) ? prev.filter((id) => id !== billId) : [...prev, billId]
         );
     };
 
@@ -52,14 +54,14 @@ export function BillsTable({ bills, onAddBill, onDeleteBills }: BillsTableProps)
             cell: ({ row }) => (
                 <input
                     type="checkbox"
-                    checked={selectedIds.includes(row.original.billName)}
-                    onChange={() => toggleSelection(row.original.billName)}
+                    checked={selectedIds.includes(row.original.id)}
+                    onChange={() => toggleSelection(row.original.id)}
                 />
             ),
         },
         {
             accessorKey: "billName",
-            header: "Bill name",
+            header: "Split bill name",
             cell: ({ row }) => (
                 <Link
                     to={`/bills/${row.original.id}`}
@@ -74,16 +76,24 @@ export function BillsTable({ bills, onAddBill, onDeleteBills }: BillsTableProps)
             header: "Location",
         },
         {
+            accessorKey: "tripDate",
+            header: "Trip date",
+        },
+        {
+            accessorKey: "participants",
+            header: "Participants",
+        },
+        {
             accessorKey: "status",
             header: "Status",
         },
         {
-            accessorKey: "paymentMethod",
-            header: "Method",
+            accessorKey: "totalAmount",
+            header: "Total spent",
         },
         {
-            accessorKey: "totalAmount",
-            header: "Amount",
+            accessorKey: "lastUpdated",
+            header: "Last updated",
         },
     ];
 
@@ -95,7 +105,7 @@ export function BillsTable({ bills, onAddBill, onDeleteBills }: BillsTableProps)
             columnFilters,
         },
         onGlobalFilterChange: setGlobalFilter,
-        onColumnFiltersChange: setColumnFilters,
+        // onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
@@ -106,13 +116,13 @@ export function BillsTable({ bills, onAddBill, onDeleteBills }: BillsTableProps)
             {/* controls */}
             <div className="flex items-center space-x-2">
                 <Input
-                    placeholder="Search bills..."
+                    placeholder="Search split bill..."
                     value={globalFilter ?? ""}
                     onChange={(e) => setGlobalFilter(e.target.value)}
                     className="max-w-sm"
                 />
 
-                <select
+                {/* <select
                     value={
                         (columnFilters.find((f) => f.id === "status")?.value as string) ||
                         ""
@@ -130,9 +140,9 @@ export function BillsTable({ bills, onAddBill, onDeleteBills }: BillsTableProps)
                     <option value="Future">Future</option>
                     <option value="On-going">On-going</option>
                     <option value="Finished">Finished</option>
-                </select>
+                </select> */}
 
-                <Button onClick={onAddBill}>+ Add</Button>
+                <Button style={{ backgroundColor: "#20cd8d" }} onClick={onAddBill}>+ Add</Button>
 
                 <Button
                     variant="destructive"
@@ -146,11 +156,11 @@ export function BillsTable({ bills, onAddBill, onDeleteBills }: BillsTableProps)
             {/* table */}
             <div className="overflow-auto rounded-md border">
                 <Table>
-                    <TableHeader>
+                    <TableHeader style={{ backgroundColor: "#eae8e8ff" }}>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => (
-                                    <TableHead key={header.id}>
+                                    <TableHead key={header.id} style={{ fontWeight: 'bold' }}>
                                         {header.isPlaceholder
                                             ? null
                                             : flexRender(header.column.columnDef.header, header.getContext())}
