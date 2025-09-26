@@ -1,0 +1,16 @@
+.welcome-message {
+  font-size: 4rem;
+  font-weight: 600;
+  line-height: 1;
+  background: #20cd8d;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* word-break: break-word; */
+  text-align: center;
+  padding-top: 10rem;
+}
+
+.bills-table {
+  margin: 8rem;
+}

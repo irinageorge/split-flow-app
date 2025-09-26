@@ -1,5 +1,5 @@
 import './Login.css'
-import { useLoginPage } from '@/services/LoginPageQuery';
+import { useLogin } from '@/services/LoginPageQuery';
 import appIcon from "../assets/split.svg"
 import globeImg from "../assets/navigation.png"
 import SignIn from './SignIn';
@@ -7,7 +7,7 @@ import SignUp from './SignUp';
 
 export const LoginPage = () => {
 
-    const { data } = useLoginPage();
+    const { data } = useLogin();
     console.log("Data:", data);
 
     return <div className='parent'>

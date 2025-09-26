@@ -15,6 +15,8 @@ import { Label } from "@/components/ui/label"
 import appIcon from "../assets/split.svg"
 import { useLogin } from "@/services/LoginPageQuery"
 import { Loader2 } from "lucide-react"
+import { useDispatch } from "react-redux"
+import { addAuthDetails } from "@/store/AuthSlice"
 
 export default function SignIn() {
     const id = useId();
@@ -23,6 +25,7 @@ export default function SignIn() {
     const [open, setOpen] = useState(false);
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const { mutateAsync: login, isPending, error, reset } = useLogin();
 
@@ -34,6 +37,7 @@ export default function SignIn() {
             {
                 onSuccess: (resp) => {
                     console.log("Login response:", resp);
+                    dispatch(addAuthDetails({ email, userId: resp.user_id }));
                     navigate("/home", { replace: true });
                 },
                 onError: () => {
