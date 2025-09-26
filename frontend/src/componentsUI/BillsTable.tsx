@@ -38,7 +38,7 @@ export function BillsTable({ bills, onAddBill, onDeleteBills }: BillsTableProps)
     const [globalFilter, setGlobalFilter] = useState("");
     const [columnFilters, setColumnFilters] = useState<any[]>([]);
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
-
+    
     const toggleSelection = (billName: string) => {
         setSelectedIds((prev) =>
             prev.includes(billName) ? prev.filter((id) => id !== billName) : [...prev, billName]

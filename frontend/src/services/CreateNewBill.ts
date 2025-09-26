@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
+import { useSelector } from "react-redux";
 
 type CreateRequest = { title: string; account_id: number };
 type CreateResponse = {
@@ -11,17 +12,16 @@ type CreateResponse = {
 };
 
 export function useCreateNewBill() {
+  const userId = useSelector((state: any) => state.authSlice.auth.userId);
+
   return useMutation({
-    mutationFn: async ({
-      title,
-      account_id,
-    }: CreateRequest): Promise<CreateResponse> => {
+    mutationFn: async ({ title }: CreateRequest): Promise<CreateResponse> => {
       const res = await fetch("http://127.0.0.1:8000/splitflow/bills", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ title, account_id }),
+        body: JSON.stringify({ title, account_id: userId }),
       });
 
       if (!res.ok) {

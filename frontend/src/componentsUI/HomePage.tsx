@@ -52,9 +52,6 @@ export const HomePage = () => {
         </div>
 
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogTrigger asChild>
-                <Button>Add</Button>
-            </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>Add new bill to your dashboard</DialogTitle>
