@@ -1,14 +1,14 @@
 import './App.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
-import { LoginPage } from './componentsUI/LoginPage';
-import { HomePage } from './componentsUI/HomePage';
+import { LoginPage } from './customComponentsUI/LoginPage';
+import { HomePage } from './customComponentsUI/HomePage';
 import { Provider, useSelector } from 'react-redux';
 import { RootState, store } from './store/store';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './components/ui/dialog';
 import { Button } from './components/ui/button';
 import { useIdleLogout } from './useIdleLogout';
-import { BillDetailsPage } from './componentsUI/BillDetailsPage';
+import { BillDetailsPage } from './customComponentsUI/BillDetailsPage';
 
 const queryClient = new QueryClient();
 
