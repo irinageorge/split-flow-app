@@ -16,7 +16,7 @@ import appIcon from "../assets/split.svg"
 import { useLogin } from "@/services/LoginPageQuery"
 import { Loader2 } from "lucide-react"
 import { useDispatch } from "react-redux"
-import { addAuthDetails } from "@/store/AuthSlice"
+import { setLogin } from "@/store/AuthSlice"
 
 export default function SignIn() {
     const id = useId();
@@ -27,17 +27,17 @@ export default function SignIn() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const { mutateAsync: login, isPending, error, reset } = useLogin();
+    const { mutateAsync: loginMutation, isPending, error, reset } = useLogin();
 
     const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         reset();
-        login(
+        loginMutation(
             { email, password },
             {
                 onSuccess: (resp) => {
                     console.log("Login response:", resp);
-                    dispatch(addAuthDetails({ email, userId: resp.user_id }));
+                    dispatch(setLogin({ email, userId: resp.user_id }));
                     navigate("/home", { replace: true });
                 },
                 onError: () => {

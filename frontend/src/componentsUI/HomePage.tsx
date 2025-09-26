@@ -8,10 +8,23 @@ import { useCreateNewBill } from '@/services/CreateNewBill';
 
 
 export const HomePage = () => {
-    const [bills, setBills] = useState<Bill[]>([]);
+
+    const dummyBills: Bill[] = [
+        {
+            id: "1",
+            billName: "Milano trip",
+            location: "Milano, Italy",
+            status: "On-going",
+            paymentMethod: "Credit Card",
+            totalAmount: "$120.50",
+        }]
+
+    const [bills, setBills] = useState<Bill[]>(dummyBills);
     const [isOpen, setIsOpen] = useState(false);
     const [newBillName, setNewBillName] = useState("");
     const [newLocation, setNewLocation] = useState("");
+
+
 
     const { mutate: createBill, data, isPending, error } = useCreateNewBill();
 
