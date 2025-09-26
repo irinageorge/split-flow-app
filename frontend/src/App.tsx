@@ -1,21 +1,47 @@
 import './App.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
 import { LoginPage } from './componentsUI/LoginPage';
 import { HomePage } from './componentsUI/HomePage';
-import { Provider } from 'react-redux';
-import { store } from './store/store';
+import { Provider, useSelector } from 'react-redux';
+import { RootState, store } from './store/store';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from './components/ui/dialog';
+import { Button } from './components/ui/button';
+import { useIdleLogout } from './useIdleLogout';
+import { BillDetailsPage } from './componentsUI/BillDetailsPage';
 
 const queryClient = new QueryClient();
 
+export const ProtectedRoute = () => {
+  const email = useSelector((state: RootState) => state.authSlice.email);
+  const userId = useSelector((state: RootState) => state.authSlice.userId);
+
+  const isLoggedIn = !!userId && !!email;
+
+  if (!isLoggedIn) {
+    return <Navigate to="/" replace />;
+  }
+
+  return <Outlet />;
+};
+
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <LoginPage />,
   },
   {
-    path: '/home',
-    element: <HomePage />,
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: "/home",
+        element: <HomePage />,
+      },
+      {
+        path: "/bills/:id",
+        element: <BillDetailsPage />,
+      },
+    ],
   },
   {
     path: '*',
@@ -23,12 +49,40 @@ const router = createBrowserRouter([
   },
 ]);
 
+function AppContent() {
+  const email = useSelector((state: RootState) => state.authSlice.email);
+  const userId = useSelector((state: RootState) => state.authSlice.userId);
+
+  const isLoggedIn = !!email && !!userId;
+
+  // only enable idle logout if logged in
+  const { showWarning, stayLoggedIn } = useIdleLogout(30, 30, isLoggedIn);
+
+  return (
+    <>
+      <RouterProvider router={router} />
+      {isLoggedIn && showWarning && (
+        <Dialog open>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Session expiring</DialogTitle>
+            </DialogHeader>
+            <p>You will be logged out soon due to inactivity.</p>
+            <Button onClick={stayLoggedIn}>Stay logged in</Button>
+          </DialogContent>
+        </Dialog>
+      )}
+    </>
+  );
+}
+
 export default function App() {
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <AppContent />
       </QueryClientProvider>
     </Provider>
   );
 }
+
