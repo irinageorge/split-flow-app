@@ -6,7 +6,7 @@ import SignUp from './SignUp';
 
 export const LoginPage = () => {
 
-    return <div className='parent'>
+    return <div className='parent' style={{ minHeight: "100vh", backgroundColor: "#20cd8d" }}>
         <img src={globeImg} alt="globe" className="globe" />
         <div className="title-position">
             <img src={appIcon} alt="app icon" className="app-icon" />
