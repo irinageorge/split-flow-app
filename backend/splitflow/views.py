@@ -27,6 +27,16 @@ def bill_list_create(request):
             return JsonResponse(BillSerializer(bill).data, status=status.HTTP_201_CREATED)
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(["GET"])
+def bills_by_user(request, account_id):
+    try:
+        user = Account.objects.get(id=account_id)
+    except Account.DoesNotExist:
+        return JsonResponse({"error": "User not found"}, status=404)
+
+    bills = Bill.objects.filter(billuser__user=user)
+    serializer = BillSerializer(bills, many=True)
+    return JsonResponse(serializer.data, safe=False)
 
 @api_view(["GET"])
 def bill_detail(request, pk):
