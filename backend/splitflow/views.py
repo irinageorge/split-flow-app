@@ -64,3 +64,15 @@ def bill_entry_create(request, bill_id):
         serializer.save(user=account, bill=bill)
         return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
     return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["POST"])
+def leave_bills(request, account_id):
+    user = Account.objects.get(id=account_id)
+    bill_ids = request.data.get("bill_ids", [])
+
+    if not bill_ids:
+        return JsonResponse({"detail": "No bills selected"}, status=400)
+
+    deleted_count, _ = BillUser.objects.filter(user=user, bill_id__in=bill_ids).delete()
+
+    return JsonResponse({"detail": f"Removed from {deleted_count} bills"})
