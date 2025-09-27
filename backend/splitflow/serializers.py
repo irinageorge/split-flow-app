@@ -13,7 +13,11 @@ class BillEntrySerializer(serializers.ModelSerializer):
 class BillSerializer(serializers.ModelSerializer):
     created_by = serializers.StringRelatedField(read_only=True)
     entries = BillEntrySerializer(many=True, read_only=True)
+    created_on = serializers.SerializerMethodField()
 
     class Meta:
         model = Bill
         fields = ["id", "title", "created_by", "created_on", "is_closed", "entries", "location", 'spend']
+
+    def get_created_on(self, obj):
+        return obj.created_on.date()
