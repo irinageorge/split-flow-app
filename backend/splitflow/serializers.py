@@ -16,4 +16,4 @@ class BillSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Bill
-        fields = ["id", "title", "created_by", "created_on", "is_closed", "entries"]
+        fields = ["id", "title", "created_by", "created_on", "is_closed", "entries", "location", 'spend']
