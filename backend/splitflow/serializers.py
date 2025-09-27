@@ -21,3 +21,4 @@ class BillSerializer(serializers.ModelSerializer):
 
     def get_created_on(self, obj):
         return obj.created_on.date()
+
