@@ -6,26 +6,20 @@ from .serializers import BillSerializer, BillEntrySerializer
 from accounts.models import Account
 
 
-@api_view(["GET", "POST"])
+@api_view(["POST"])
 def bill_list_create(request):
-    if request.method == "GET":
-        bills = Bill.objects.all()
-        serializer = BillSerializer(bills, many=True)
-        return JsonResponse(serializer.data, safe=False)
+    account_id = request.data.get("account_id")
+    try:
+        account = Account.objects.get(id=account_id)
+    except Account.DoesNotExist:
+        return JsonResponse({"error": "Account not found"}, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == "POST":
-        account_id = request.data.get("account_id")
-        try:
-            account = Account.objects.get(id=account_id)
-        except Account.DoesNotExist:
-            return JsonResponse({"error": "Account not found"}, status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = BillSerializer(data=request.data)
-        if serializer.is_valid():
-            bill = serializer.save(created_by=account)
-            BillUser.objects.create(bill=bill, user=account)
-            return JsonResponse(BillSerializer(bill).data, status=status.HTTP_201_CREATED)
-        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer = BillSerializer(data=request.data)
+    if serializer.is_valid():
+        bill = serializer.save(created_by=account)
+        BillUser.objects.create(bill=bill, user=account)
+        return JsonResponse(BillSerializer(bill).data, status=status.HTTP_201_CREATED)
+    return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["GET"])
 def bills_by_user(request, account_id):
