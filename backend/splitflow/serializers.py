@@ -22,3 +22,12 @@ class BillSerializer(serializers.ModelSerializer):
     def get_created_on(self, obj):
         return obj.created_on.date()
 
+class UserJoinedBillSerializer(serializers.ModelSerializer):
+    created_on = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Bill
+        fields = ["id", "title", "created_on", "is_closed", "location", "spend"]
+
+    def get_created_on(self, obj):
+        return obj.created_on.date()
