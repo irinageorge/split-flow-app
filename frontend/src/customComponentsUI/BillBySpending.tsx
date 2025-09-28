@@ -12,8 +12,8 @@ export const BillBySpending = ({ bills }: BillBySpendingProps) => {
     const spendingData = useMemo(() => {
         return bills
             .map((bill) => ({
-                billName: bill.billName,
-                total: parseFloat(bill.totalAmount.replace("$", "")),
+                billName: bill.title,
+                total: parseFloat(bill.spend.toString()),
             }))
             .filter((bill) => bill.total > 0);
     }, [bills]);

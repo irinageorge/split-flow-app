@@ -1,6 +1,6 @@
 import "./HomePage.css";
 import { Bill, BillsTable } from "./BillsTable";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -12,17 +12,28 @@ import {
 import { Input } from "@/components/ui/input";
 import { useCreateNewBill } from "@/services/CreateNewBill";
 import { BillsByStatusChart } from "./BillsByStatusChart";
-import { dummyBills } from "@/store/dummyData";
 import { BillBySpending } from "./BillBySpending";
+import { useDispatch, useSelector } from "react-redux";
+import { useFetchTableData } from "@/services/TableData";
+import { useDeleteBill } from "@/services/DeleteBill";
+import { setSelectedRowIds } from "@/store/TableData";
 
 export const HomePage = () => {
 
-    const [bills, setBills] = useState<Bill[]>(dummyBills);
+    const dispatch = useDispatch();
+
+    const { tableData } = useSelector((state: any) => state.tableDataSlice);
+    const accountId = useSelector((state: any) => state.authSlice.userId);
+    const rowIds = useSelector((state: any) => state.tableDataSlice.selectedRowIds);
+
+    const [bills, setBills] = useState<Bill[]>(tableData);
     const [isOpen, setIsOpen] = useState(false);
     const [newBillName, setNewBillName] = useState("");
     const [newLocation, setNewLocation] = useState("");
 
-    const { mutate: createBill, data, isPending, error } = useCreateNewBill();
+    const { mutate: createBill } = useCreateNewBill();
+    const { mutate: deleteBill } = useDeleteBill(accountId);
+    const { data: tableDataFetch, isFetching, } = useFetchTableData(accountId);
 
     const handleAddBill = () => {
         if (!newBillName) return;
@@ -34,15 +45,14 @@ export const HomePage = () => {
                     setBills((prev) => [
                         ...prev,
                         {
-                            id: String(res.id),
-                            billName: res.title,
+                            id: res.id,
+                            title: res.title,
+                            created_by: "Unknown",
+                            created_on: "Unknown",
+                            is_closed: res.is_closed,
+                            entries: [],
                             location: newLocation || "Unknown",
-                            tripDate: "Unknown",
-                            participants: [],
-                            status: res.is_closed ? "Finished" : "On-going",
-                            paymentStatus: "Unknown",
-                            totalAmount: "$0.00",
-                            lastUpdated: "Unknown",
+                            spend: 0,
                         },
                     ]);
 
@@ -55,15 +65,23 @@ export const HomePage = () => {
     };
 
     const handleDeleteBills = (ids: string[]) => {
-        setBills((prev) => prev.filter((bill) => !ids.includes(bill.id)));
+        dispatch(setSelectedRowIds({ rowIds: ids }));
+        deleteBill();
     };
+
+    useEffect(() => {
+        if (!isFetching && tableDataFetch) {
+            setBills(tableDataFetch)
+        }
+    }, [tableDataFetch, isFetching]);
+
 
     return (
         <div style={{ minHeight: "100vh", backgroundColor: "white" }}>
             <div className="welcome-message">
                 Welcome to <strong>SplitFlow</strong>
             </div>
-
+            {/* 
             <div className="flex flex-wrap gap-1 pt-15 px-10 justify-center">
                 <div className="h-[350px]">
                     <BillsByStatusChart bills={bills} />
@@ -71,7 +89,7 @@ export const HomePage = () => {
                 <div className="h-[350px]">
                     <BillBySpending bills={bills} />
                 </div>
-            </div>
+            </div> */}
 
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
                 <DialogContent className="sm:max-w-[425px]">
