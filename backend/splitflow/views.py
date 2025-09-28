@@ -66,6 +66,19 @@ def bill_entry_create(request, bill_id):
         return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
     return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(["PUT", "PATCH"])
+def bill_edit(request, bill_id):
+    try:
+        bill = Bill.objects.get(pk=bill_id)
+    except Bill.DoesNotExist:
+        return JsonResponse({"error": "Bill not found"}, status=404)
+
+    serializer = BillSerializer(bill, data=request.data, partial=(request.method=="PATCH"))
+    if serializer.is_valid():
+        serializer.save()
+        return JsonResponse(serializer.data)
+    return JsonResponse(serializer.errors, status=400)
+
 @api_view(["POST"])
 def leave_bills(request, account_id):
     user = Account.objects.get(id=account_id)
