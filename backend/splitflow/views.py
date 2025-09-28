@@ -34,9 +34,9 @@ def bills_by_user(request, account_id):
     return JsonResponse(serializer.data, safe=False)
 
 @api_view(["GET"])
-def bill_detail(request, pk):
+def bill_detail(request, bill_id):
     try:
-        bill = Bill.objects.get(pk=pk)
+        bill = Bill.objects.get(pk=bill_id)
     except Bill.DoesNotExist:
         return JsonResponse({"error": "Bill not found"}, status=404)
 
