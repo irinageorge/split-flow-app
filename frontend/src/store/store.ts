@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer, { AuthSliceType } from "./AuthSlice";
+import tableDataReducer from "./TableData";
 
 function loadFromLocalStorage(): { authSlice: AuthSliceType } | undefined {
   try {
@@ -25,6 +26,7 @@ const preloadedState = loadFromLocalStorage();
 export const store = configureStore({
   reducer: {
     authSlice: authReducer,
+    tableDataSlice: tableDataReducer,
   },
   preloadedState,
 });
