@@ -67,6 +67,29 @@ def bill_entry_create(request, bill_id):
     return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["PUT", "PATCH"])
+def bill_entry_edit(request, entry_id):
+    try:
+        entry = BillEntry.objects.get(pk=entry_id)
+    except BillEntry.DoesNotExist:
+        return JsonResponse({"error": "Entry not found"}, status=404)
+
+    serializer = BillEntrySerializer(entry, data=request.data, partial=(request.method=="PATCH"))
+    if serializer.is_valid():
+        serializer.save()
+        return JsonResponse(serializer.data)
+    return JsonResponse(serializer.errors, status=400)
+
+@api_view(["DELETE"])
+def bill_entry_delete(request, entry_id):
+    try:
+        entry = BillEntry.objects.get(pk=entry_id)
+    except BillEntry.DoesNotExist:
+        return JsonResponse({"error": "Entry not found"}, status=404)
+
+    entry.delete()
+    return JsonResponse({"message": "Bill entry deleted successfully"}, status=204)
+
+@api_view(["PUT", "PATCH"])
 def bill_edit(request, bill_id):
     try:
         bill = Bill.objects.get(pk=bill_id)
