@@ -1,6 +1,8 @@
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework import status
+
+from .decorators import check_entry_owner
 from .models import Bill, BillEntry, BillUser
 from .serializers import BillSerializer, BillEntrySerializer, UserJoinedBillSerializer
 from accounts.models import Account
@@ -67,6 +69,7 @@ def bill_entry_create(request, bill_id):
     return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["PUT", "PATCH"])
+@check_entry_owner
 def bill_entry_edit(request, entry_id):
     try:
         entry = BillEntry.objects.get(pk=entry_id)
@@ -80,6 +83,7 @@ def bill_entry_edit(request, entry_id):
     return JsonResponse(serializer.errors, status=400)
 
 @api_view(["DELETE"])
+@check_entry_owner
 def bill_entry_delete(request, entry_id):
     try:
         entry = BillEntry.objects.get(pk=entry_id)
