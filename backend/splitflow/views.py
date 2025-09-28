@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework import status
 from .models import Bill, BillEntry, BillUser
-from .serializers import BillSerializer, BillEntrySerializer
+from .serializers import BillSerializer, BillEntrySerializer, UserJoinedBillSerializer
 from accounts.models import Account
 
 
@@ -29,7 +29,8 @@ def bills_by_user(request, account_id):
         return JsonResponse({"error": "User not found"}, status=404)
 
     bills = Bill.objects.filter(billuser__user=user)
-    serializer = BillSerializer(bills, many=True)
+
+    serializer = UserJoinedBillSerializer(bills, many=True)
     return JsonResponse(serializer.data, safe=False)
 
 @api_view(["GET"])
