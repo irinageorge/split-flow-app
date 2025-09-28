@@ -1,5 +1,7 @@
 from django.db import models
 from django.db.models import Sum
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 
 from accounts.models import Account
 
@@ -12,10 +14,7 @@ class Bill(models.Model):
     created_by = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='bills')
     created_on = models.DateTimeField(auto_now_add=True)
     is_closed = models.BooleanField(default=False)
-
-    @property
-    def spend(self):
-        return self.entries.aggregate(total=Sum("amount"))["total"] or 0
+    spend = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
         return self.title
@@ -35,3 +34,9 @@ class BillUser(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
     joined_on = models.DateTimeField(auto_now_add=True)
 
+@receiver([post_save, post_delete], sender=BillEntry)
+def update_bill_spend(sender, instance, **kwargs):
+    bill = instance.bill
+    total = bill.entries.aggregate(total=Sum("amount"))["total"] or 0
+    bill.spend = total
+    bill.save(update_fields=["spend"])
