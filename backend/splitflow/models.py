@@ -8,7 +8,7 @@ from accounts.models import Account
 
 class Bill(models.Model):
     title = models.CharField(max_length=100)
-    location = models.CharField(max_length=50, default="Varna, Bulgaria")
+    location = models.CharField(max_length=50)
     created_by = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='bills')
     created_on = models.DateTimeField(auto_now_add=True)
     is_closed = models.BooleanField(default=False)
