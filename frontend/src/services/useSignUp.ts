@@ -16,7 +16,7 @@ type SignUpResponse = {
 export function useSignUp() {
   return useMutation({
     mutationFn: async (payload: SignUpRequest): Promise<SignUpResponse> => {
-      const res = await fetch("http://127.0.0.1:8000/accounts/create/", {
+      const res = await fetch("http://127.0.0.1:8000/accounts/create-bill", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

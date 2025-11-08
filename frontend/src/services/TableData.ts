@@ -10,7 +10,7 @@ export function useFetchTableData(accountId: number) {
     queryKey: ["tableData", accountId],
     queryFn: async () => {
       const response = await fetch(
-        `http://127.0.0.1:8000/splitflow/bills_by_user/${accountId}`
+        `http://127.0.0.1:8000/splitflow/${accountId}/bills-by-user`
       );
 
       if (!response.ok) {

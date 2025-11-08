@@ -14,7 +14,7 @@ export function useDeleteBill(accountId: string | number) {
       }
 
       const res = await fetch(
-        `http://127.0.0.1:8000/splitflow/bills/leave/${accountId}`,
+        `http://127.0.0.1:8000/splitflow/${accountId}/bill-leave`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

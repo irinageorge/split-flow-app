@@ -37,19 +37,19 @@ type BillsTableProps = {
   bills: Bill[];
   onAddBill: () => void;
   onDeleteBills: (ids: string[]) => void;
+  onEditBill: (billId: string) => void;
 };
 
 export const BillsTable = ({
   bills,
   onAddBill,
   onDeleteBills,
+  onEditBill,
 }: BillsTableProps) => {
   const dispatch = useDispatch();
 
   const [globalFilter, setGlobalFilter] = useState("");
-  // const [columnFilters, setColumnFilters] = useState<any[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [rowIds, setRowIds] = useState<string[]>([]);
 
   const accountId = useSelector((state: any) => state.authSlice.userId);
 
@@ -62,7 +62,6 @@ export const BillsTable = ({
   }, [data, isFetching]);
 
   const toggleSelection = (billId: string) => {
-    setRowIds([billId]);
     setSelectedIds((prev) =>
       prev.includes(billId)
         ? prev.filter((id) => id !== billId)
@@ -77,8 +76,8 @@ export const BillsTable = ({
       cell: ({ row }) => (
         <input
           type="checkbox"
-          checked={selectedIds.includes(row.id)}
-          onChange={() => toggleSelection(row.id)}
+          checked={selectedIds.includes(row.original.id.toString())}
+          onChange={() => toggleSelection(row.original.id.toString())}
         />
       ),
     },
@@ -106,18 +105,10 @@ export const BillsTable = ({
       accessorKey: "created_by",
       header: "Created by",
     },
-    // {
-    //     accessorKey: "status",
-    //     header: "Status",
-    // },
     {
       accessorKey: "spend",
       header: "Spend",
     },
-    // {
-    //     accessorKey: "",
-    //     header: "Last updated",
-    // },
   ];
 
   const table = useReactTable({
@@ -125,14 +116,27 @@ export const BillsTable = ({
     columns,
     state: {
       globalFilter,
-      // columnFilters,
     },
     onGlobalFilterChange: setGlobalFilter,
-    // onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+
+  const handleDeleteClick = () => {
+    onDeleteBills(selectedIds);
+    setSelectedIds([]);
+  };
+
+  const handleEditClick = () => {
+    const billId = selectedIds[0];
+    if (selectedIds.length !== 1 || !billId) {
+      return;
+    }
+
+    onEditBill(billId);
+    setSelectedIds([]);
+  };
 
   return (
     <div className="space-y-4">
@@ -145,34 +149,22 @@ export const BillsTable = ({
           className="max-w-sm"
         />
 
-        {/* <select
-                    value={
-                        (columnFilters.find((f) => f.id === "status")?.value as string) ||
-                        ""
-                    }
-                    onChange={(e) =>
-                        setColumnFilters(
-                            e.target.value
-                                ? [{ id: "status", value: e.target.value }]
-                                : []
-                        )
-                    }
-                    className="border p-1 rounded"
-                >
-                    <option value="">All Statuses</option>
-                    <option value="Future">Future</option>
-                    <option value="On-going">On-going</option>
-                    <option value="Finished">Finished</option>
-                </select> */}
-
         <Button style={{ backgroundColor: "#20cd8d" }} onClick={onAddBill}>
           + Add
         </Button>
 
         <Button
+          variant="default"
+          disabled={selectedIds.length !== 1}
+          onClick={handleEditClick}
+        >
+          Edit
+        </Button>
+
+        <Button
           variant="destructive"
           disabled={selectedIds.length === 0}
-          onClick={() => onDeleteBills(selectedIds)}
+          onClick={handleDeleteClick}
         >
           Delete
         </Button>
