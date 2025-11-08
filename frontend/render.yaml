@@ -1,9 +1,0 @@
-services:
-  - type: web
-    name: splitflow-backend
-    runtime: python
-    buildCommand: "pip install -r backend/requirements.txt"
-    startCommand: "cd backend && gunicorn backend.wsgi:application --bind 0.0.0.0:$PORT"
-    envVars:
-      - key: DJANGO_SETTINGS_MODULE
-        value: backend.settings

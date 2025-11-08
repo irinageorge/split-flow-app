@@ -2,7 +2,6 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-import subprocess
 
 
 def main():
@@ -19,12 +18,5 @@ def main():
     execute_from_command_line(sys.argv)
 
 
-if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.settings")
-
-    # Only start React in the main process (prevents duplicate starts)
-    if os.environ.get("RUN_MAIN") != "true":
-        subprocess.Popen(["npm", "run", "dev"], cwd="../frontend", shell=True)
-
-    from django.core.management import execute_from_command_line
-    execute_from_command_line(sys.argv)
+if __name__ == '__main__':
+    main()
