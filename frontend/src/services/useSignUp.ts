@@ -16,11 +16,14 @@ type SignUpResponse = {
 export function useSignUp() {
   return useMutation({
     mutationFn: async (payload: SignUpRequest): Promise<SignUpResponse> => {
-      const res = await fetch("http://127.0.0.1:8000/accounts/create-bill", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const res = await fetch(
+        "http://127.0.0.1:8000/accounts/bill-list-create",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
 
       if (!res.ok) {
         let msg = "Sign up request failed";
