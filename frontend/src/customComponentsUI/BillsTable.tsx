@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -18,9 +18,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Link } from "react-router-dom";
-import { useFetchTableData } from "@/services/TableData";
-import { useDispatch, useSelector } from "react-redux";
-import { setTableData } from "@/store/TableData";
 
 export type Bill = {
   id: number;
@@ -46,22 +43,12 @@ export const BillsTable = ({
   onDeleteBills,
   onEditBill,
 }: BillsTableProps) => {
-  const dispatch = useDispatch();
-
   const [globalFilter, setGlobalFilter] = useState("");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
-  const accountId = useSelector((state: any) => state.authSlice.userId);
-
-  const { data, isFetching } = useFetchTableData(accountId);
-
-  useEffect(() => {
-    if (!isFetching && data) {
-      dispatch(setTableData({ tableData: [data] }));
-    }
-  }, [data, isFetching]);
-
   const toggleSelection = (billId: string) => {
+    if (!billId) return;
+
     setSelectedIds((prev) =>
       prev.includes(billId)
         ? prev.filter((id) => id !== billId)
@@ -76,17 +63,18 @@ export const BillsTable = ({
       cell: ({ row }) => (
         <input
           type="checkbox"
-          checked={selectedIds.includes(row.original.id.toString())}
-          onChange={() => toggleSelection(row.original.id.toString())}
+          checked={selectedIds.includes(row.original.id?.toString() || "")}
+          onChange={() => toggleSelection(row.original.id?.toString() || "")}
+          disabled={!row.original.id}
         />
       ),
     },
     {
-      accessorKey: "billName",
+      accessorKey: "title",
       header: "Split bill name",
       cell: ({ row }) => (
         <Link
-          to={`/bills/${row.original.id}`}
+          to={`/bills/${row.original.id || ""}`}
           className="text-blue-600 underline"
         >
           {row.original.title}
@@ -108,11 +96,15 @@ export const BillsTable = ({
     {
       accessorKey: "spend",
       header: "Spend",
+      cell: ({ row }) => {
+        const amount = Number(row.original.spend || 0);
+        return `$${amount.toFixed(2)}`;
+      },
     },
   ];
 
   const table = useReactTable({
-    data: bills,
+    data: bills || [],
     columns,
     state: {
       globalFilter,
@@ -140,7 +132,6 @@ export const BillsTable = ({
 
   return (
     <div className="space-y-4">
-      {/* controls */}
       <div className="flex items-center space-x-2">
         <Input
           placeholder="Search split bill..."
@@ -170,7 +161,6 @@ export const BillsTable = ({
         </Button>
       </div>
 
-      {/* table */}
       <div className="overflow-auto rounded-md border">
         <Table>
           <TableHeader style={{ backgroundColor: "#e0e0e0" }}>
@@ -214,7 +204,6 @@ export const BillsTable = ({
         </Table>
       </div>
 
-      {/* pagination */}
       <div className="flex items-center justify-between">
         <div>
           <Button

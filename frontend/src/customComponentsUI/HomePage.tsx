@@ -10,10 +10,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useCreateNewBill } from "@/services/CreateNewBill";
+import { useCreateNewBill } from "@/services/useCreateNewBill";
 import { useDispatch, useSelector } from "react-redux";
-import { useFetchTableData } from "@/services/TableData";
-import { useDeleteBill } from "@/services/DeleteBill";
+import { useFetchTableData } from "@/services/useFetchTableData";
+import { useDeleteBill } from "@/services/useDeleteBill";
 import { setSelectedRowIds } from "@/store/TableData";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEditBill } from "@/services/useEditBill";
