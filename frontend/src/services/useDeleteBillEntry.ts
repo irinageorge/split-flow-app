@@ -1,0 +1,50 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
+
+type DeleteResponse = {
+  message: string;
+};
+
+export function useDeleteBillEntry(billId: string) {
+  const queryClient = useQueryClient();
+  const accountId = useSelector((state: RootState) => state.authSlice.userId);
+
+  return useMutation({
+    mutationFn: async (entryId: string): Promise<DeleteResponse | null> => {
+      const res = await fetch(
+        `http://127.0.0.1:8000/splitflow/${entryId}/bill-entries/delete`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            account_id: accountId,
+          }),
+        }
+      );
+
+      if (res.status === 204) {
+        return null;
+      }
+
+      if (!res.ok) {
+        let msg = "Failed to delete bill entry";
+        try {
+          const data = await res.json();
+          msg = data.error || data.message || JSON.stringify(data);
+        } catch {
+          msg = await res.text();
+        }
+        throw new Error(msg);
+      }
+
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["billDetails", billId] });
+    },
+    retry: false,
+  });
+}
