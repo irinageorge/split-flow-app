@@ -116,4 +116,9 @@ def leave_bills(request, account_id):
 
     deleted_count, _ = BillUser.objects.filter(user=user, bill_id__in=bill_ids).delete()
 
+    for bill in Bill.objects.filter(id__in=bill_ids):
+        has_users = BillUser.objects.filter(bill=bill).exists()
+        if not has_users:
+            bill.delete()
+
     return JsonResponse({"detail": f"Removed from {deleted_count} bills"})
